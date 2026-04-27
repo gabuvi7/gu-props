@@ -1,0 +1,23 @@
+{
+  "name": "gu-prop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "GU-Props SaaS multi-tenant real estate management platform.",
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "dev": "pnpm --parallel --filter @gu-prop/api --filter @gu-prop/web dev",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "test:unit": "pnpm -r test:unit",
+    "db:generate": "pnpm --filter @gu-prop/database prisma:generate",
+    "db:migrate": "pnpm --filter @gu-prop/database prisma:migrate"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "prisma": "^6.2.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

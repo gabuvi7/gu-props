@@ -1,0 +1,21 @@
+node_modules/
+.pnpm-store/
+.next/
+dist/
+coverage/
+.turbo/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Logs and local OS/editor files
+*.log
+.DS_Store
+.idea/
+.vscode/
+
+# Prisma/local databases
+*.db
+*.db-journal

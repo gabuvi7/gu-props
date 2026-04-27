@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@gu-prop/shared": ["packages/shared/src/index.ts"],
+      "@gu-prop/shared/*": ["packages/shared/src/*"],
+      "@gu-prop/database": ["packages/database/src/index.ts"],
+      "@gu-prop/database/*": ["packages/database/src/*"]
+    }
+  }
+}
