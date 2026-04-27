@@ -33,6 +33,26 @@ El MVP debe priorizar:
 
 ---
 
+## Estado de implementación
+
+**Leyenda:**
+
+- ✅ Hecho: implementado con estructura funcional y tests preparados.
+- 🟡 Parcial: existe base/skeleton o parte del flujo, pero todavía no cumple todos los criterios.
+- ⬜ Pendiente: todavía no implementado.
+
+**Avance actual:**
+
+| Estado | User Stories |
+| --- | --- |
+| ✅ Hechas | US-001, US-002, US-004, US-010, US-011, US-012, US-014, US-016, US-017, US-018, US-019 |
+| 🟡 Parciales | US-003, US-006, US-007, US-008, US-015 |
+| ⬜ Pendientes | US-005, US-009, US-013, US-020, US-021, US-022, US-023, US-024, US-025, US-026, US-027, US-028, US-029, US-030, US-031, US-032, US-033, US-034 |
+
+> Nota: se considera “parcial” cuando hay modelo, helper o endpoint inicial, pero falta completar el comportamiento final del criterio de aceptación. No nos hacemos trampa, porque ahí es donde los proyectos se desordenan.
+
+---
+
 ## 3. Épicas del MVP
 
 1. Base SaaS y multi-tenancy.
@@ -55,7 +75,7 @@ El MVP debe priorizar:
 
 ## Épica 1 — Base SaaS y multi-tenancy
 
-### US-001 — Crear modelo de Tenant
+### ✅ US-001 — Crear modelo de Tenant
 
 **Prioridad:** P0  
 **Como** administrador SaaS,  
@@ -71,7 +91,7 @@ El MVP debe priorizar:
 
 ---
 
-### US-002 — Agregar tenant_id a entidades de negocio
+### ✅ US-002 — Agregar tenant_id a entidades de negocio
 
 **Prioridad:** P0  
 **Como** plataforma SaaS,  
@@ -86,7 +106,7 @@ El MVP debe priorizar:
 
 ---
 
-### US-003 — Implementar contexto de request
+### 🟡 US-003 — Implementar contexto de request
 
 **Prioridad:** P0  
 **Como** backend,  
@@ -101,7 +121,7 @@ El MVP debe priorizar:
 
 ---
 
-### US-004 — Crear repositories tenant-aware
+### ✅ US-004 — Crear repositories tenant-aware
 
 **Prioridad:** P0  
 **Como** equipo técnico,  
@@ -119,7 +139,7 @@ El MVP debe priorizar:
 
 ## Épica 2 — Autenticación, usuarios y roles
 
-### US-005 — Login de usuario
+### ⬜ US-005 — Login de usuario
 
 **Prioridad:** P0  
 **Como** usuario de una inmobiliaria,  
@@ -135,7 +155,7 @@ El MVP debe priorizar:
 
 ---
 
-### US-006 — Asociación usuario-tenant
+### 🟡 US-006 — Asociación usuario-tenant
 
 **Prioridad:** P0  
 **Como** administrador SaaS,  
@@ -151,7 +171,7 @@ El MVP debe priorizar:
 
 ---
 
-### US-007 — Roles y permisos básicos
+### 🟡 US-007 — Roles y permisos básicos
 
 **Prioridad:** P0  
 **Como** dueño de inmobiliaria,  
@@ -176,7 +196,7 @@ El MVP debe priorizar:
 
 ## Épica 3 — Configuración de inmobiliaria
 
-### US-008 — Configurar datos básicos del tenant
+### 🟡 US-008 — Configurar datos básicos del tenant
 
 **Prioridad:** P0  
 **Como** administrador de inmobiliaria,  
@@ -192,7 +212,7 @@ El MVP debe priorizar:
 
 ---
 
-### US-009 — Resolver tenant por subdominio
+### ⬜ US-009 — Resolver tenant por subdominio
 
 **Prioridad:** P1  
 **Como** usuario de inmobiliaria,  
@@ -209,7 +229,7 @@ El MVP debe priorizar:
 
 ## Épica 4 — Propietarios
 
-### US-010 — Crear propietario
+### ✅ US-010 — Crear propietario
 
 **Prioridad:** P0  
 **Como** operador,  
@@ -225,7 +245,7 @@ El MVP debe priorizar:
 
 ---
 
-### US-011 — Gestionar propietarios
+### ✅ US-011 — Gestionar propietarios
 
 **Prioridad:** P0  
 **Como** operador,  
@@ -243,7 +263,7 @@ El MVP debe priorizar:
 
 ## Épica 5 — Inquilinos
 
-### US-012 — Crear inquilino
+### ✅ US-012 — Crear inquilino
 
 **Prioridad:** P0  
 **Como** operador,  
@@ -259,7 +279,7 @@ El MVP debe priorizar:
 
 ---
 
-### US-013 — Consultar historial de inquilino
+### ⬜ US-013 — Consultar historial de inquilino
 
 **Prioridad:** P1  
 **Como** administrador,  
@@ -277,7 +297,7 @@ El MVP debe priorizar:
 
 ## Épica 6 — Propiedades
 
-### US-014 — Crear propiedad
+### ✅ US-014 — Crear propiedad
 
 **Prioridad:** P0  
 **Como** operador,  
@@ -293,7 +313,7 @@ El MVP debe priorizar:
 
 ---
 
-### US-015 — Gestionar estado de propiedad
+### 🟡 US-015 — Gestionar estado de propiedad
 
 **Prioridad:** P1  
 **Como** administrador,  
@@ -310,7 +330,7 @@ El MVP debe priorizar:
 
 ## Épica 7 — Contratos de alquiler
 
-### US-016 — Crear contrato
+### ✅ US-016 — Crear contrato
 
 **Prioridad:** P0  
 **Como** operador,  
@@ -326,7 +346,7 @@ El MVP debe priorizar:
 
 ---
 
-### US-017 — Consultar contratos activos
+### ✅ US-017 — Consultar contratos activos
 
 **Prioridad:** P0  
 **Como** administrador,  
@@ -341,7 +361,7 @@ El MVP debe priorizar:
 
 ---
 
-### US-018 — Gestionar estados de contrato
+### ✅ US-018 — Gestionar estados de contrato
 
 **Prioridad:** P1  
 **Como** administrador,  
@@ -358,7 +378,7 @@ El MVP debe priorizar:
 
 ## Épica 8 — Índices y ajustes
 
-### US-019 — Configurar índice del contrato
+### ✅ US-019 — Configurar índice del contrato
 
 **Prioridad:** P0  
 **Como** operador,  
@@ -373,7 +393,7 @@ El MVP debe priorizar:
 
 ---
 
-### US-020 — Cargar índice manual como fallback
+### ⬜ US-020 — Cargar índice manual como fallback
 
 **Prioridad:** P0  
 **Como** administrador,  
@@ -389,7 +409,7 @@ El MVP debe priorizar:
 
 ---
 
-### US-021 — Calcular aumento próximo
+### ⬜ US-021 — Calcular aumento próximo
 
 **Prioridad:** P1  
 **Como** administrador,  
@@ -406,7 +426,7 @@ El MVP debe priorizar:
 
 ## Épica 9 — Pagos y caja
 
-### US-022 — Registrar pago
+### ⬜ US-022 — Registrar pago
 
 **Prioridad:** P0  
 **Como** operador,  
@@ -423,7 +443,7 @@ El MVP debe priorizar:
 
 ---
 
-### US-023 — Ver saldo de contrato/inquilino
+### ⬜ US-023 — Ver saldo de contrato/inquilino
 
 **Prioridad:** P0  
 **Como** operador,  
@@ -439,7 +459,7 @@ El MVP debe priorizar:
 
 ---
 
-### US-024 — Registrar movimiento de caja
+### ⬜ US-024 — Registrar movimiento de caja
 
 **Prioridad:** P0  
 **Como** sistema,  
@@ -456,7 +476,7 @@ El MVP debe priorizar:
 
 ## Épica 10 — Liquidaciones y PDFs
 
-### US-025 — Generar liquidación a propietario
+### ⬜ US-025 — Generar liquidación a propietario
 
 **Prioridad:** P0  
 **Como** administrador,  
@@ -473,7 +493,7 @@ El MVP debe priorizar:
 
 ---
 
-### US-026 — Generar PDF de liquidación
+### ⬜ US-026 — Generar PDF de liquidación
 
 **Prioridad:** P0  
 **Como** administrador,  
@@ -488,7 +508,7 @@ El MVP debe priorizar:
 
 ---
 
-### US-027 — Adjuntar o almacenar contrato PDF
+### ⬜ US-027 — Adjuntar o almacenar contrato PDF
 
 **Prioridad:** P1  
 **Como** operador,  
@@ -505,7 +525,7 @@ El MVP debe priorizar:
 
 ## Épica 11 — Reportes básicos
 
-### US-028 — Reporte de vencimientos
+### ⬜ US-028 — Reporte de vencimientos
 
 **Prioridad:** P0  
 **Como** administrador,  
@@ -520,7 +540,7 @@ El MVP debe priorizar:
 
 ---
 
-### US-029 — Reporte de caja mensual
+### ⬜ US-029 — Reporte de caja mensual
 
 **Prioridad:** P0  
 **Como** dueño de inmobiliaria,  
@@ -536,7 +556,7 @@ El MVP debe priorizar:
 
 ---
 
-### US-030 — Reporte de saldos pendientes
+### ⬜ US-030 — Reporte de saldos pendientes
 
 **Prioridad:** P0  
 **Como** operador,  
@@ -553,7 +573,7 @@ El MVP debe priorizar:
 
 ## Épica 12 — Auditoría y seguridad operativa
 
-### US-031 — Registrar auditoría de acciones sensibles
+### ⬜ US-031 — Registrar auditoría de acciones sensibles
 
 **Prioridad:** P0  
 **Como** plataforma,  
@@ -568,7 +588,7 @@ El MVP debe priorizar:
 
 ---
 
-### US-032 — Logs con contexto operativo
+### ⬜ US-032 — Logs con contexto operativo
 
 **Prioridad:** P1  
 **Como** equipo técnico,  
@@ -585,7 +605,7 @@ El MVP debe priorizar:
 
 ## Épica 13 — Onboarding del tenant piloto
 
-### US-033 — Crear tenant Vergani Propiedades
+### ⬜ US-033 — Crear tenant Vergani Propiedades
 
 **Prioridad:** P0  
 **Como** GU Solutions,  
@@ -601,7 +621,7 @@ El MVP debe priorizar:
 
 ---
 
-### US-034 — Cargar datos iniciales del piloto
+### ⬜ US-034 — Cargar datos iniciales del piloto
 
 **Prioridad:** P0  
 **Como** equipo de implementación,  

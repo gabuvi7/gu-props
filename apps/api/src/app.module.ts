@@ -25,6 +25,6 @@ export const appModules = [
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
     // TEMPORAL: solo para desarrollo/testing hasta reemplazar headers por JWT auth.
-    consumer.apply(TemporaryHeaderRequestContextMiddleware).forRoutes("owners", "renters", "properties");
+    consumer.apply(TemporaryHeaderRequestContextMiddleware).forRoutes("owners", "renters", "properties", "contracts");
   }
 }
