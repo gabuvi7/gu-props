@@ -29,7 +29,7 @@ pnpm test
 
 ## Current slice
 
-This slice adds the first real backend foundation: Prisma client boundary, API `PrismaModule`, functional `Tenants` and `Owners` services/controllers, and unit tests proving owner operations always include the active `tenantId`.
+This slice adds the first real backend foundation: Prisma client boundary, API `PrismaModule`, functional `Tenants`, `Owners`, `Renters`, and `Properties` services/controllers, and unit tests proving tenant-scoped operations always include the active `tenantId`.
 
 ### Temporary API context warning
 
@@ -42,11 +42,31 @@ Until JWT auth exists, the API includes a development/testing-only request-conte
 
 This is NOT production auth. It is intentionally disabled in `NODE_ENV=production` and must be replaced by JWT-based authentication/authorization before a real deploy.
 
-Example request body for creating an owner:
+Ejemplo de cuerpo para crear un propietario:
 
 ```json
 {
   "displayName": "Ana Gómez",
   "email": "ana@example.com"
+}
+```
+
+Ejemplo de cuerpo para crear un inquilino:
+
+```json
+{
+  "displayName": "Juan Pérez",
+  "identityNumber": "12345678"
+}
+```
+
+Ejemplo de cuerpo para crear una propiedad:
+
+```json
+{
+  "ownerId": "owner_123",
+  "type": "APARTMENT",
+  "addressLine": "Av. Siempre Viva 123",
+  "city": "Rosario"
 }
 ```
