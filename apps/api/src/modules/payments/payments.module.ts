@@ -1,3 +1,5 @@
+import { Module } from "@nestjs/common";
 import { PaymentsService } from "./payments.service";
 
-export const PaymentsModule = { providers: [PaymentsService] } as const;
+@Module({ providers: [PaymentsService], exports: [PaymentsService] })
+export class PaymentsModule {}

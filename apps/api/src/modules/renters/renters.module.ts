@@ -1,3 +1,5 @@
+import { Module } from "@nestjs/common";
 import { RentersService } from "./renters.service";
 
-export const RentersModule = { providers: [RentersService] } as const;
+@Module({ providers: [RentersService], exports: [RentersService] })
+export class RentersModule {}
