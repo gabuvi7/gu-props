@@ -1,4 +1,5 @@
 import { type MiddlewareConsumer, Module, type NestModule } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
 import { RequestContextModule } from "./common/request-context/request-context.module";
 import { TemporaryHeaderRequestContextMiddleware } from "./common/request-context/request-context.middleware";
 import { AuditModule } from "./modules/audit/audit.module";
@@ -20,7 +21,14 @@ export const appModules = [
 ] as const;
 
 @Module({
-  imports: [RequestContextModule, ...appModules]
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      cache: true
+    }),
+    RequestContextModule,
+    ...appModules
+  ]
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
