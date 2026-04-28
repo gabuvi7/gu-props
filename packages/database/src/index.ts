@@ -2,9 +2,13 @@ import { PrismaClient } from "@prisma/client";
 
 export { PrismaClient };
 export type {
+  CashMovement,
+  CashMovementType,
   Currency,
   EconomicIndexType,
   Owner,
+  Payment,
+  PaymentStatus,
   Prisma,
   Property,
   PropertyStatus,

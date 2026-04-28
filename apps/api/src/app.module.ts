@@ -8,6 +8,7 @@ import { OwnersModule } from "./modules/owners/owners.module";
 import { PaymentsModule } from "./modules/payments/payments.module";
 import { PropertiesModule } from "./modules/properties/properties.module";
 import { RentersModule } from "./modules/renters/renters.module";
+import { ReportsModule } from "./modules/reports/reports.module";
 import { TenantsModule } from "./modules/tenants/tenants.module";
 
 export const appModules = [
@@ -17,6 +18,7 @@ export const appModules = [
   PropertiesModule,
   ContractsModule,
   PaymentsModule,
+  ReportsModule,
   AuditModule
 ] as const;
 
@@ -33,6 +35,8 @@ export const appModules = [
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
     // TEMPORAL: solo para desarrollo/testing hasta reemplazar headers por JWT auth.
-    consumer.apply(TemporaryHeaderRequestContextMiddleware).forRoutes("owners", "renters", "properties", "contracts");
+    consumer
+      .apply(TemporaryHeaderRequestContextMiddleware)
+      .forRoutes("owners", "renters", "properties", "contracts", "payments", "cash-movements", "reports");
   }
 }

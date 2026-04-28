@@ -45,9 +45,9 @@ El MVP debe priorizar:
 
 | Estado | User Stories |
 | --- | --- |
-| ✅ Hechas | US-001, US-002, US-004, US-010, US-011, US-012, US-014, US-016, US-017, US-018, US-019 |
+| ✅ Hechas | US-001, US-002, US-004, US-010, US-011, US-012, US-013, US-014, US-016, US-017, US-018, US-019, US-022, US-023, US-024, US-028, US-029, US-030 |
 | 🟡 Parciales | US-003, US-006, US-007, US-008, US-015 |
-| ⬜ Pendientes | US-005, US-009, US-013, US-020, US-021, US-022, US-023, US-024, US-025, US-026, US-027, US-028, US-029, US-030, US-031, US-032, US-033, US-034 |
+| ⬜ Pendientes | US-005, US-009, US-020, US-021, US-025, US-026, US-027, US-031, US-032, US-033, US-034, US-035 |
 
 > Nota: se considera “parcial” cuando hay modelo, helper o endpoint inicial, pero falta completar el comportamiento final del criterio de aceptación. No nos hacemos trampa, porque ahí es donde los proyectos se desordenan.
 
@@ -279,7 +279,7 @@ El MVP debe priorizar:
 
 ---
 
-### ⬜ US-013 — Consultar historial de inquilino
+### ✅ US-013 — Consultar historial de inquilino
 
 **Prioridad:** P1  
 **Como** administrador,  
@@ -426,7 +426,7 @@ El MVP debe priorizar:
 
 ## Épica 9 — Pagos y caja
 
-### ⬜ US-022 — Registrar pago
+### ✅ US-022 — Registrar pago
 
 **Prioridad:** P0  
 **Como** operador,  
@@ -443,7 +443,7 @@ El MVP debe priorizar:
 
 ---
 
-### ⬜ US-023 — Ver saldo de contrato/inquilino
+### ✅ US-023 — Ver saldo de contrato/inquilino
 
 **Prioridad:** P0  
 **Como** operador,  
@@ -459,7 +459,7 @@ El MVP debe priorizar:
 
 ---
 
-### ⬜ US-024 — Registrar movimiento de caja
+### ✅ US-024 — Registrar movimiento de caja
 
 **Prioridad:** P0  
 **Como** sistema,  
@@ -471,6 +471,25 @@ El MVP debe priorizar:
 - Cada pago genera movimiento asociado.
 - El movimiento incluye tipo, monto, fecha, usuario y tenant.
 - No se crean movimientos sin operación fuente o motivo explícito.
+
+---
+
+### ⬜ US-035 — Aplicar deuda y crédito previos al registrar un pago
+
+**Prioridad:** P1  
+**Como** operador,  
+**quiero** que al registrar un pago se apliquen automáticamente la deuda arrastrada y el crédito a favor previos del inquilino,  
+**para** que el monto debido refleje la situación real sin cálculos manuales.
+
+**Criterios de aceptación:**
+
+- Al crear un nuevo `Payment` para un contrato, el sistema consulta la deuda pendiente (`remainingDebt`) y el crédito a favor (`creditBalance`) acumulados de pagos previos del mismo contrato/inquilino.
+- El `dueAmount` efectivo del nuevo pago se ajusta sumando deuda previa y restando crédito previo.
+- Cada aplicación queda trazada: el pago nuevo registra qué pagos previos consumió y por qué montos.
+- Si el crédito a favor cubre el `dueAmount`, el pago se registra como `PAID` con `paidAmount = 0` físico pero compensado por crédito.
+- La operación queda auditada con el detalle de imputación.
+
+> Esta US extiende la lógica de US-022. No bloquea el MVP de pagos básicos, pero es necesaria para no obligar al operador a calcular saldos a mano.
 
 ---
 
@@ -525,7 +544,7 @@ El MVP debe priorizar:
 
 ## Épica 11 — Reportes básicos
 
-### ⬜ US-028 — Reporte de vencimientos
+### ✅ US-028 — Reporte de vencimientos
 
 **Prioridad:** P0  
 **Como** administrador,  
@@ -540,7 +559,7 @@ El MVP debe priorizar:
 
 ---
 
-### ⬜ US-029 — Reporte de caja mensual
+### ✅ US-029 — Reporte de caja mensual
 
 **Prioridad:** P0  
 **Como** dueño de inmobiliaria,  
@@ -556,7 +575,7 @@ El MVP debe priorizar:
 
 ---
 
-### ⬜ US-030 — Reporte de saldos pendientes
+### ✅ US-030 — Reporte de saldos pendientes
 
 **Prioridad:** P0  
 **Como** operador,  
