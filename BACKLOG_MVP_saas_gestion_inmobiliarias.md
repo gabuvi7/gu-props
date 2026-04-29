@@ -47,7 +47,7 @@ El MVP debe priorizar:
 | --- | --- |
 | ✅ Hechas | US-001, US-002, US-004, US-010, US-011, US-012, US-013, US-014, US-016, US-017, US-018, US-019, US-022, US-023, US-024, US-025, US-026, US-028, US-029, US-030 |
 | 🟡 Parciales | US-003, US-006, US-007, US-008, US-015 |
-| ⬜ Pendientes | US-005, US-009, US-020, US-021, US-027, US-031, US-032, US-033, US-034, US-035 |
+| ⬜ Pendientes | US-005, US-009, US-020, US-021, US-027, US-031, US-032, US-033, US-034, US-035, US-036, US-037 |
 
 > Nota: se considera “parcial” cuando hay modelo, helper o endpoint inicial, pero falta completar el comportamiento final del criterio de aceptación. No nos hacemos trampa, porque ahí es donde los proyectos se desordenan.
 
@@ -490,6 +490,49 @@ El MVP debe priorizar:
 - La operación queda auditada con el detalle de imputación.
 
 > Esta US extiende la lógica de US-022. No bloquea el MVP de pagos básicos, pero es necesaria para no obligar al operador a calcular saldos a mano.
+
+---
+
+### ⬜ US-036 — Dashboard principal del sistema (frontend)
+
+**Prioridad:** P0
+**Como** operador de inmobiliaria,
+**quiero** una pantalla principal con visión rápida de la operación,
+**para** entender en segundos qué requiere mi atención del día.
+
+**Criterios de aceptación:**
+
+- Layout con header (logo, selector de tenant, avatar/menú usuario) y sidebar fijo con navegación a Inicio, Propiedades, Inquilinos, Propietarios, Contratos, Pagos, Liquidaciones, Reportes y Configuración.
+- Dashboard inicial muestra cuatro cards numéricos accionables: Vencimientos próximos (7 días), Saldos pendientes totales, Caja del mes, Liquidaciones DRAFT pendientes.
+- Bajo los cards, lista de próximos vencimientos.
+- Bajo eso, lista de últimos pagos registrados.
+- Bajo eso, lista de liquidaciones DRAFT pendientes de emisión.
+- Cada card y lista navega al reporte/listado correspondiente al hacer click.
+- Datos consumidos desde endpoints existentes: `GET /reports/upcoming-due-payments`, `GET /reports/outstanding-balances`, `GET /reports/cash-flow`, `GET /liquidations?status=DRAFT`.
+- El dashboard solo aparece para usuarios autenticados (depende de US-005 y US-006).
+- Texto y formatos en español rioplatense; montos en formato es-AR (`ARS 100.000,50`); fechas como `DD/MM/AAAA`.
+
+> Esta US no bloquea el resto del backend pero sí entrega la primera cara visible del producto a la inmobiliaria.
+
+---
+
+### ⬜ US-037 — Branding configurable por tenant
+
+**Prioridad:** P1
+**Como** dueño de inmobiliaria,
+**quiero** configurar logo, color principal y datos legales de mi inmobiliaria,
+**para** que el sistema y los comprobantes reflejen mi identidad comercial.
+
+**Criterios de aceptación:**
+
+- El tenant puede configurar `commercialName`, `logoUrl`, `primaryColor`, y campos legales en `legalIdentity` (CUIT, matrícula, domicilio).
+- El frontend aplica `primaryColor` como color de marca (header, botones primarios, acentos).
+- El logo aparece en el header y en el PDF de liquidación.
+- Si el tenant no tiene branding configurado, se aplican defaults razonables (color institucional del sistema, logo ausente).
+- Los datos legales aparecen en el PDF de liquidación cuando están configurados.
+- La configuración solo puede modificarla `OWNER` o `ADMIN`.
+
+> El backend ya soporta `TenantSettings.commercialName`, `logoUrl`, `primaryColor`, `legalIdentity`. Esta US cubre la UI de configuración y el wiring del frontend para aplicar el branding.
 
 ---
 
