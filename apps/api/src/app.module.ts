@@ -4,6 +4,7 @@ import { RequestContextModule } from "./common/request-context/request-context.m
 import { TemporaryHeaderRequestContextMiddleware } from "./common/request-context/request-context.middleware";
 import { AuditModule } from "./modules/audit/audit.module";
 import { ContractsModule } from "./modules/contracts/contracts.module";
+import { LiquidationsModule } from "./modules/liquidations/liquidations.module";
 import { OwnersModule } from "./modules/owners/owners.module";
 import { PaymentsModule } from "./modules/payments/payments.module";
 import { PropertiesModule } from "./modules/properties/properties.module";
@@ -18,6 +19,7 @@ export const appModules = [
   PropertiesModule,
   ContractsModule,
   PaymentsModule,
+  LiquidationsModule,
   ReportsModule,
   AuditModule
 ] as const;
@@ -37,6 +39,15 @@ export class AppModule implements NestModule {
     // TEMPORAL: solo para desarrollo/testing hasta reemplazar headers por JWT auth.
     consumer
       .apply(TemporaryHeaderRequestContextMiddleware)
-      .forRoutes("owners", "renters", "properties", "contracts", "payments", "cash-movements", "reports");
+      .forRoutes(
+        "owners",
+        "renters",
+        "properties",
+        "contracts",
+        "payments",
+        "cash-movements",
+        "reports",
+        "liquidations"
+      );
   }
 }

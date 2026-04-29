@@ -45,9 +45,9 @@ El MVP debe priorizar:
 
 | Estado | User Stories |
 | --- | --- |
-| ✅ Hechas | US-001, US-002, US-004, US-010, US-011, US-012, US-013, US-014, US-016, US-017, US-018, US-019, US-022, US-023, US-024, US-028, US-029, US-030 |
+| ✅ Hechas | US-001, US-002, US-004, US-010, US-011, US-012, US-013, US-014, US-016, US-017, US-018, US-019, US-022, US-023, US-024, US-025, US-026, US-028, US-029, US-030 |
 | 🟡 Parciales | US-003, US-006, US-007, US-008, US-015 |
-| ⬜ Pendientes | US-005, US-009, US-020, US-021, US-025, US-026, US-027, US-031, US-032, US-033, US-034, US-035 |
+| ⬜ Pendientes | US-005, US-009, US-020, US-021, US-027, US-031, US-032, US-033, US-034, US-035 |
 
 > Nota: se considera “parcial” cuando hay modelo, helper o endpoint inicial, pero falta completar el comportamiento final del criterio de aceptación. No nos hacemos trampa, porque ahí es donde los proyectos se desordenan.
 
@@ -495,7 +495,7 @@ El MVP debe priorizar:
 
 ## Épica 10 — Liquidaciones y PDFs
 
-### ⬜ US-025 — Generar liquidación a propietario
+### ✅ US-025 — Generar liquidación a propietario
 
 **Prioridad:** P0  
 **Como** administrador,  
@@ -512,7 +512,7 @@ El MVP debe priorizar:
 
 ---
 
-### ⬜ US-026 — Generar PDF de liquidación
+### ✅ US-026 — Generar PDF de liquidación
 
 **Prioridad:** P0  
 **Como** administrador,  

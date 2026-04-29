@@ -79,67 +79,76 @@ enum DocumentType {
   OTHER
 }
 
+enum LiquidationAdjustmentSign {
+  CREDIT
+  DEBIT
+}
+
 enum Currency {
   ARS
   USD
 }
 
 model Tenant {
-  id            String               @id @default(cuid())
-  name          String
-  slug          String               @unique
-  status        TenantStatus         @default(ACTIVE)
-  customDomain  String?              @unique
-  createdAt     DateTime             @default(now())
-  updatedAt     DateTime             @updatedAt
+  id           String       @id @default(cuid())
+  name         String
+  slug         String       @unique
+  status       TenantStatus @default(ACTIVE)
+  customDomain String?      @unique
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
 
-  users         TenantUser[]
-  settings      TenantSettings?
-  features      TenantFeature[]
-  subscriptions TenantSubscription[]
-  owners        Owner[]
-  renters       Renter[]
-  properties    Property[]
-  contracts     RentalContract[]
-  indexValues   CustomIndexValue[]
-  payments      Payment[]
-  cashMovements CashMovement[]
-  liquidations  Liquidation[]
-  documents     Document[]
-  auditLogs     AuditLog[]
+  users                        TenantUser[]
+  settings                     TenantSettings?
+  features                     TenantFeature[]
+  subscriptions                TenantSubscription[]
+  owners                       Owner[]
+  renters                      Renter[]
+  properties                   Property[]
+  contracts                    RentalContract[]
+  indexValues                  CustomIndexValue[]
+  payments                     Payment[]
+  cashMovements                CashMovement[]
+  liquidations                 Liquidation[]
+  liquidationLineItems         LiquidationLineItem[]
+  liquidationManualAdjustments LiquidationManualAdjustment[]
+  documents                    Document[]
+  auditLogs                    AuditLog[]
 
   @@map("tenants")
 }
 
 model User {
-  id             String             @id @default(cuid())
-  email          String             @unique
-  name           String?
-  passwordHash   String?
-  isActive       Boolean            @default(true)
-  createdAt      DateTime           @default(now())
-  updatedAt      DateTime           @updatedAt
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String?
+  passwordHash String?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  tenants        TenantUser[]
-  auditLogs      AuditLog[]
-  uploadedValues CustomIndexValue[]
+  tenants                  TenantUser[]
+  auditLogs                AuditLog[]
+  uploadedValues           CustomIndexValue[]
+  liquidationsCreated      Liquidation[]                 @relation("LiquidationCreatedBy")
+  manualAdjustmentsCreated LiquidationManualAdjustment[] @relation("LiquidationManualAdjustmentCreatedBy")
 
   @@map("users")
 }
 
 model TenantUser {
-  id        String     @id @default(cuid())
-  tenantId  String
-  userId    String
-  role      TenantRole
-  isActive  Boolean    @default(true)
-  invitedAt DateTime   @default(now())
+  id         String     @id @default(cuid())
+  tenantId   String
+  userId     String
+  role       TenantRole
+  isActive   Boolean    @default(true)
+  invitedAt  DateTime   @default(now())
   acceptedAt DateTime?
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
 
-  tenant    Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([id, tenantId])
   @@unique([tenantId, userId])
@@ -157,10 +166,11 @@ model TenantSettings {
   defaultCurrency       Currency @default(ARS)
   defaultCommissionBps  Int      @default(0)
   operationalParameters Json?
+  legalIdentity         Json?
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
 
-  tenant                Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
   @@unique([id, tenantId])
   @@index([tenantId])
@@ -176,7 +186,7 @@ model TenantFeature {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
   @@unique([id, tenantId])
   @@unique([tenantId, key])
@@ -185,17 +195,17 @@ model TenantFeature {
 }
 
 model TenantSubscription {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   tenantId  String
   plan      String
   status    String
   limits    Json?
-  startsAt  DateTime @default(now())
+  startsAt  DateTime  @default(now())
   endsAt    DateTime?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
-  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
   @@unique([id, tenantId])
   @@index([tenantId])
@@ -215,10 +225,10 @@ model Owner {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
-  tenant         Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  properties     Property[]
-  contracts      RentalContract[]
-  liquidations   Liquidation[]
+  tenant       Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  properties   Property[]
+  contracts    RentalContract[]
+  liquidations Liquidation[]
 
   @@unique([id, tenantId])
   @@unique([tenantId, email])
@@ -228,20 +238,20 @@ model Owner {
 }
 
 model Renter {
-  id              String    @id @default(cuid())
-  tenantId        String
-  displayName     String
-  email           String?
-  phone           String?
-  identityNumber  String?
-  guaranteeInfo   Json?
-  deletedAt       DateTime?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id             String    @id @default(cuid())
+  tenantId       String
+  displayName    String
+  email          String?
+  phone          String?
+  identityNumber String?
+  guaranteeInfo  Json?
+  deletedAt      DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
-  tenant          Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  contracts       RentalContract[]
-  payments        Payment[]
+  tenant    Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  contracts RentalContract[]
+  payments  Payment[]
 
   @@unique([id, tenantId])
   @@unique([tenantId, identityNumber])
@@ -251,23 +261,23 @@ model Renter {
 }
 
 model Property {
-  id              String         @id @default(cuid())
-  tenantId        String
-  ownerId         String
-  type            PropertyType
-  status          PropertyStatus @default(AVAILABLE)
-  addressLine     String
-  city            String?
-  province        String?
-  postalCode      String?
-  commissionBps   Int?
-  deletedAt       DateTime?
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
+  id            String         @id @default(cuid())
+  tenantId      String
+  ownerId       String
+  type          PropertyType
+  status        PropertyStatus @default(AVAILABLE)
+  addressLine   String
+  city          String?
+  province      String?
+  postalCode    String?
+  commissionBps Int?
+  deletedAt     DateTime?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 
-  tenant          Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  owner           Owner          @relation(fields: [ownerId, tenantId], references: [id, tenantId])
-  contracts       RentalContract[]
+  tenant    Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  owner     Owner            @relation(fields: [ownerId, tenantId], references: [id, tenantId])
+  contracts RentalContract[]
 
   @@unique([id, tenantId])
   @@index([tenantId])
@@ -277,28 +287,28 @@ model Property {
 }
 
 model RentalContract {
-  id                    String               @id @default(cuid())
-  tenantId              String
-  propertyId            String
-  ownerId               String
-  renterId              String
-  status                RentalContractStatus @default(DRAFT)
-  startsAt              DateTime
-  endsAt                DateTime
-  rentAmount            Decimal              @db.Decimal(14, 2)
-  currency              Currency             @default(ARS)
-  dueDayOfMonth         Int
-  adjustmentIndexType   EconomicIndexType
+  id                     String               @id @default(cuid())
+  tenantId               String
+  propertyId             String
+  ownerId                String
+  renterId               String
+  status                 RentalContractStatus @default(DRAFT)
+  startsAt               DateTime
+  endsAt                 DateTime
+  rentAmount             Decimal              @db.Decimal(14, 2)
+  currency               Currency             @default(ARS)
+  dueDayOfMonth          Int
+  adjustmentIndexType    EconomicIndexType
   adjustmentPeriodMonths Int
-  nextAdjustmentAt      DateTime?
-  createdAt             DateTime             @default(now())
-  updatedAt             DateTime             @updatedAt
+  nextAdjustmentAt       DateTime?
+  createdAt              DateTime             @default(now())
+  updatedAt              DateTime             @updatedAt
 
-  tenant                Tenant               @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  property              Property             @relation(fields: [propertyId, tenantId], references: [id, tenantId])
-  owner                 Owner                @relation(fields: [ownerId, tenantId], references: [id, tenantId])
-  renter                Renter               @relation(fields: [renterId, tenantId], references: [id, tenantId])
-  payments              Payment[]
+  tenant   Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  property Property  @relation(fields: [propertyId, tenantId], references: [id, tenantId])
+  owner    Owner     @relation(fields: [ownerId, tenantId], references: [id, tenantId])
+  renter   Renter    @relation(fields: [renterId, tenantId], references: [id, tenantId])
+  payments Payment[]
 
   @@unique([id, tenantId])
   @@index([tenantId])
@@ -318,27 +328,27 @@ model EconomicIndex {
   createdAt DateTime          @default(now())
   updatedAt DateTime          @updatedAt
 
-  values    CustomIndexValue[]
+  values CustomIndexValue[]
 
   @@unique([type, name])
   @@map("economic_indices")
 }
 
 model CustomIndexValue {
-  id              String        @id @default(cuid())
+  id              String   @id @default(cuid())
   tenantId        String
   economicIndexId String
   periodDate      DateTime
-  value           Decimal       @db.Decimal(18, 6)
-  isManual        Boolean       @default(true)
+  value           Decimal  @db.Decimal(18, 6)
+  isManual        Boolean  @default(true)
   uploadedById    String?
   metadata        Json?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
-  tenant          Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  economicIndex   EconomicIndex @relation(fields: [economicIndexId], references: [id])
-  uploadedBy      User?         @relation(fields: [uploadedById], references: [id])
+  tenant        Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  economicIndex EconomicIndex @relation(fields: [economicIndexId], references: [id])
+  uploadedBy    User?         @relation(fields: [uploadedById], references: [id])
 
   @@unique([id, tenantId])
   @@unique([tenantId, economicIndexId, periodDate])
@@ -348,32 +358,34 @@ model CustomIndexValue {
 }
 
 model Payment {
-  id              String        @id @default(cuid())
-  tenantId        String
-  contractId      String
-  renterId        String
-  status          PaymentStatus @default(PENDING)
-  dueAmount       Decimal       @db.Decimal(14, 2)
-  paidAmount      Decimal       @db.Decimal(14, 2)
-  remainingDebt   Decimal       @db.Decimal(14, 2)
-  creditBalance   Decimal       @db.Decimal(14, 2)
-  currency        Currency      @default(ARS)
-  paidAt          DateTime?
-  dueAt           DateTime
-  notes           String?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  id            String        @id @default(cuid())
+  tenantId      String
+  contractId    String
+  renterId      String
+  status        PaymentStatus @default(PENDING)
+  dueAmount     Decimal       @db.Decimal(14, 2)
+  paidAmount    Decimal       @db.Decimal(14, 2)
+  remainingDebt Decimal       @db.Decimal(14, 2)
+  creditBalance Decimal       @db.Decimal(14, 2)
+  currency      Currency      @default(ARS)
+  paidAt        DateTime?
+  dueAt         DateTime
+  notes         String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 
-  tenant          Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  contract        RentalContract @relation(fields: [contractId, tenantId], references: [id, tenantId])
-  renter          Renter        @relation(fields: [renterId, tenantId], references: [id, tenantId])
-  cashMovements   CashMovement[]
+  tenant               Tenant                @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  contract             RentalContract        @relation(fields: [contractId, tenantId], references: [id, tenantId])
+  renter               Renter                @relation(fields: [renterId, tenantId], references: [id, tenantId])
+  cashMovements        CashMovement[]
+  liquidationLineItems LiquidationLineItem[]
 
   @@unique([id, tenantId])
   @@index([tenantId])
   @@index([tenantId, contractId])
   @@index([tenantId, renterId])
   @@index([tenantId, status])
+  @@index([tenantId, paidAt, status])
   @@map("payments")
 }
 
@@ -391,8 +403,8 @@ model CashMovement {
   createdById String?
   createdAt   DateTime         @default(now())
 
-  tenant      Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  payment     Payment?         @relation(fields: [paymentId, tenantId], references: [id, tenantId])
+  tenant  Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  payment Payment? @relation(fields: [paymentId, tenantId], references: [id, tenantId])
 
   @@unique([id, tenantId])
   @@index([tenantId])
@@ -402,29 +414,88 @@ model CashMovement {
 }
 
 model Liquidation {
-  id             String            @id @default(cuid())
-  tenantId       String
-  ownerId        String
-  status         LiquidationStatus @default(DRAFT)
-  periodStart    DateTime
-  periodEnd      DateTime
-  grossAmount    Decimal           @db.Decimal(14, 2)
-  commissionAmount Decimal         @db.Decimal(14, 2)
-  netAmount      Decimal           @db.Decimal(14, 2)
-  currency       Currency          @default(ARS)
-  issuedAt       DateTime?
-  paidAt         DateTime?
-  createdAt      DateTime          @default(now())
-  updatedAt      DateTime          @updatedAt
+  id               String            @id @default(cuid())
+  tenantId         String
+  ownerId          String
+  createdById      String?
+  status           LiquidationStatus @default(DRAFT)
+  periodStart      DateTime
+  periodEnd        DateTime
+  grossAmount      Decimal           @db.Decimal(14, 2)
+  commissionAmount Decimal           @db.Decimal(14, 2)
+  netAmount        Decimal           @db.Decimal(14, 2)
+  currency         Currency          @default(ARS)
+  notes            String?
+  issuedAt         DateTime?
+  paidAt           DateTime?
+  voidedAt         DateTime?
+  voidReason       String?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
 
-  tenant         Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  owner          Owner             @relation(fields: [ownerId, tenantId], references: [id, tenantId])
+  tenant            Tenant                        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  owner             Owner                         @relation(fields: [ownerId, tenantId], references: [id, tenantId])
+  createdBy         User?                         @relation("LiquidationCreatedBy", fields: [createdById], references: [id])
+  lineItems         LiquidationLineItem[]
+  manualAdjustments LiquidationManualAdjustment[]
 
   @@unique([id, tenantId])
-  @@unique([tenantId, ownerId, periodStart, periodEnd])
+  // Unique parcial sobre liquidaciones NO anuladas: se crea via SQL crudo en la
+  // migración `20260429020135_liquidation_active_unique` porque Prisma no soporta
+  // índices únicos parciales en el schema declarativo.
+  // Index name: `liquidations_active_unique`.
   @@index([tenantId])
   @@index([tenantId, status])
   @@map("liquidations")
+}
+
+model LiquidationLineItem {
+  id                   String   @id @default(cuid())
+  tenantId             String
+  liquidationId        String
+  paymentId            String
+  propertyId           String
+  propertyAddress      String
+  contractId           String
+  paidAt               DateTime
+  paidAmount           Decimal  @db.Decimal(14, 2)
+  dueAmount            Decimal  @db.Decimal(14, 2)
+  liquidableAmount     Decimal  @db.Decimal(14, 2)
+  commissionBpsApplied Int
+  commissionAmount     Decimal  @db.Decimal(14, 2)
+  netAmount            Decimal  @db.Decimal(14, 2)
+  currency             Currency @default(ARS)
+  createdAt            DateTime @default(now())
+
+  tenant      Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  liquidation Liquidation @relation(fields: [liquidationId], references: [id], onDelete: Cascade)
+  payment     Payment     @relation(fields: [paymentId, tenantId], references: [id, tenantId])
+
+  @@unique([id, tenantId])
+  @@index([tenantId])
+  @@index([tenantId, liquidationId])
+  @@index([tenantId, paymentId])
+  @@map("liquidation_line_items")
+}
+
+model LiquidationManualAdjustment {
+  id            String                    @id @default(cuid())
+  tenantId      String
+  liquidationId String
+  concept       String
+  amount        Decimal                   @db.Decimal(14, 2)
+  sign          LiquidationAdjustmentSign
+  createdById   String?
+  createdAt     DateTime                  @default(now())
+
+  tenant      Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  liquidation Liquidation @relation(fields: [liquidationId], references: [id], onDelete: Cascade)
+  createdBy   User?       @relation("LiquidationManualAdjustmentCreatedBy", fields: [createdById], references: [id])
+
+  @@unique([id, tenantId])
+  @@index([tenantId])
+  @@index([tenantId, liquidationId])
+  @@map("liquidation_manual_adjustments")
 }
 
 model Document {
@@ -439,7 +510,7 @@ model Document {
   createdById String?
   createdAt   DateTime     @default(now())
 
-  tenant      Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
   @@unique([id, tenantId])
   @@unique([tenantId, storageKey])
@@ -449,18 +520,18 @@ model Document {
 }
 
 model AuditLog {
-  id          String   @id @default(cuid())
-  tenantId    String
-  userId      String?
-  requestId   String?
-  entityType  String
-  entityId    String?
-  action      String
-  metadata    Json?
-  createdAt   DateTime @default(now())
+  id         String   @id @default(cuid())
+  tenantId   String
+  userId     String?
+  requestId  String?
+  entityType String
+  entityId   String?
+  action     String
+  metadata   Json?
+  createdAt  DateTime @default(now())
 
-  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  user        User?    @relation(fields: [userId], references: [id])
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user   User?  @relation(fields: [userId], references: [id])
 
   @@unique([id, tenantId])
   @@index([tenantId])
